@@ -31,7 +31,7 @@ An OpenGL application for procedurally generating terrain meshes using the Midpo
 
 ### UI
 [x] Wireframe - Enables wireframe view
-[x] Topological shader - Enables topological shader instead of Phong lighting
+[ ] Topological shader - Enables topological shader instead of Phong lighting
 * Seed - **integer**, seeds the pseudorandom number generator
 * fHeight - **float**, Influences the minimum and maximum height during midpoint number generation
 * fHeightReduction - **float [0, 1]**. Influences the random number dropoff during number generation. Represents terrain roughness.
@@ -48,3 +48,6 @@ An OpenGL application for procedurally generating terrain meshes using the Midpo
   * Shader - Creates shaders and handles passing information to shaders.
   * Terrain - Terrain information, setup, generation and drawing methods.
   * Texture - Loads a texture using STB_image.h
+* Resources/ 
+  * Textures - Contains textures used by the application
+  * Shaders - Contains vertex(.vert) and fragment(.frag) shaders. *diffuseSpecularAmbientShader* for Phong lighting, *simpleShader* for topological lighting.
