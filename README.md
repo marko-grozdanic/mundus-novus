@@ -21,8 +21,7 @@ An OpenGL application for procedurally generating terrain meshes using the Midpo
 ### Running the program
 1. Open the solution mathos-opengl-terrain/Mundus Novus/Mundus Novus.sln in Visual Studio 2019.
 2. The target build options are Debug, x64.
-![Build options](https://puu.sh/Gmlox/90fe9cdc9f.png)
-
+[Build options](https://puu.sh/Gmlox/90fe9cdc9f.png)
 3. Press Ctrl+F5 or *Debug->Start without debugging* to run the application. Building should recognise all the dependencies and successfully build the solution. 
 
 ### Controls
