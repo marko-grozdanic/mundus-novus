@@ -121,8 +121,8 @@ int main()
         //ImGUI Settings window
         {
             static int seed = 571281;
-            static float fHeight = 8.0;
-            static float fRoughness = 0.5;
+            static float fHeight = 16.0;
+            static float fRoughness = 0.6;
 
             ImGui::Begin("Settings");
 

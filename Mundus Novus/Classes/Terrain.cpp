@@ -43,7 +43,6 @@ void Terrain::setupTerrain() {
 
 void Terrain::drawTerrain(bool wireframe) {
 	glBindVertexArray(VAO);
-	std::cout << "Vertex count: " << vertices.size() << std::endl;
 	
 	// Generate a buffer for the indices
 	GLuint elementbuffer;
