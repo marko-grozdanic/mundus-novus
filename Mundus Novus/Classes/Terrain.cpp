@@ -10,12 +10,15 @@
 #include <time.h>       /* time */
 #include <random>
 
-Terrain::Terrain(unsigned int sizeX) {
-	this->sizeX = sizeX;
+Terrain::Terrain(unsigned int n) {
+	this->sizeN = n;
+	this->sizeX = pow(2, n) + 1;
 	this->terrainHeightmap.resize(sizeX * sizeX);
 }
 
 void Terrain::setupTerrain() {
+	std::cout << "Vertices: " << this->vertices.size() << std::endl;
+	std::cout << "Indices: " << this->indices.size() << std::endl;
 	// Create buffers/arrays
 	unsigned int VBO;
 
@@ -65,6 +68,7 @@ void Terrain::drawTerrain(bool wireframe) {
 
 void Terrain::generateTerrain() {
 	vertices.clear();
+	indices.clear();
 	int size = sizeX * sizeX;
 	Vertex vertex;
 	for (int i = 0; i < sizeX; i++) {
@@ -97,8 +101,14 @@ void Terrain::generateTerrain() {
 }
 
 void Terrain::genMidpointDisplacement(unsigned int seed, float spread, float spreadReductionRate) {
-	MidpointDisplacement heightmapMD(seed, spread, spreadReductionRate, sizeX);
+	MidpointDisplacement heightmapMD(seed, spread, spreadReductionRate, sizeX, sizeN);
 
 	this->terrainHeightmap = heightmapMD.heightmap;
 	this->minHeightOffset = abs(heightmapMD.getMinHeight());
+}
+
+void Terrain::setSize(int n) {
+	this->sizeN = n;
+	this->sizeX = pow(2, n) + 1;
+	this->terrainHeightmap.resize(sizeX * sizeX);
 }

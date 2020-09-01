@@ -85,7 +85,8 @@ int main()
     lightingShader.setInt("material.specular", grassSpecular.ID);
 
     //Start with rendering a flat terrain
-    Terrain newTerrain(65);
+    int sizeN = 6;
+    Terrain newTerrain(sizeN);
     newTerrain.generateTerrain();    
     newTerrain.setupTerrain();
 
@@ -128,11 +129,13 @@ int main()
 
             ImGui::Checkbox("Wireframe", &wireframe);
             ImGui::Checkbox("Topological Shader", &topShader);
+            ImGui::SliderInt("Size(2^n + 1)", &sizeN, 2, 10);
             ImGui::InputInt("Seed", &seed);
             ImGui::InputFloat("fHeight", &fHeight, 0.01f, 1.0f, "%.2f");
             ImGui::SliderFloat("fRoughness", &fRoughness, 0.0f, 1.0f, "ratio = %.3f");
             //ImGui::InputFloat("fRoughness", &fRoughness, 0.01f, 1.0f, "%.2f");
-            if (ImGui::Button("Generate")) {            
+            if (ImGui::Button("Generate")) {          
+                newTerrain.setSize(sizeN);
                 newTerrain.genMidpointDisplacement(seed, fHeight, fRoughness);
                 newTerrain.generateTerrain();
                 newTerrain.setupTerrain();

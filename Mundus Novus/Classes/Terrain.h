@@ -11,6 +11,7 @@ struct Vertex {
 class Terrain {
 public:
 	unsigned int sizeX;
+	unsigned int sizeN;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<float> terrainHeightmap;
@@ -19,6 +20,7 @@ public:
 	void generateTerrain();
 	void setupTerrain();
 	void drawTerrain(bool wireframe);
+	void setSize(int n);
 	void calculateVertexNormals();
 	void calculateFaceNormals();
 

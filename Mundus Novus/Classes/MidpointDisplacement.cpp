@@ -1,8 +1,9 @@
 #include "MidpointDisplacement.h"
 #include <iostream>
 
-MidpointDisplacement::MidpointDisplacement(unsigned int seed, float fHeight, float fRoughness, int sizeX) {
+MidpointDisplacement::MidpointDisplacement(unsigned int seed, float fHeight, float fRoughness, int sizeX, int n) {
 	this->sizeX = sizeX;
+	this->n;
 	this->fHeight = fHeight;
 	//this->fRoughness = pow(2, -fRoughness);
 	this->fRoughness = fRoughness;
@@ -70,6 +71,7 @@ int returnNLogValue(int n)
 void MidpointDisplacement::midpointDisplacement()
 {
 	int i = 0;
+	//while (i < n)
 	while (i < returnNLogValue(sizeX))
 	{
 		int numberOfQuads = pow(4, i);
