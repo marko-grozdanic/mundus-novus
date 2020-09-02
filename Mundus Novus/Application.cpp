@@ -78,6 +78,7 @@ int main()
     Shader lightingShader("./Resources/Shaders/diffuseSpecularAmbientShader.vert", "./Resources/Shaders/diffuseSpecularAmbientShader.frag");
     Shader simpleShader("./Resources/Shaders/simpleShader.vert", "./Resources/Shaders/simpleShader.frag");
 
+    //Texture grassDiffuse("pebbles_diffuse.png", true), grassSpecular("pebbles_specular.png", true);
     Texture grassDiffuse("grass.png", true), grassSpecular("grass_spec.png", true);
 
     lightingShader.use();
@@ -102,6 +103,11 @@ int main()
 
     static bool wireframe = false;
     static bool topShader = false;
+
+    float lightDirX = 4.13f, lightDirY = 5.34f, lightDirZ = 2.75;
+    float lightAmbientX = 0.2f, lightAmbientY = 0.2f, lightAmbientZ = 0.2f;
+    float lightDiffuseX = 0.5f, lightDiffuseY = 0.5f, lightDiffuseZ = 0.5f;
+    float lightSpecX = 1.0f, lightSpecY = 1.0f, lightSpecZ = 1.0f;
 
     /*Render loop*/
     while (!glfwWindowShouldClose(window))
@@ -146,6 +152,18 @@ int main()
             ImGui::Text("Controls (?)");
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("WASD - Camera movement\nRight mouse button - Rotate camera\nESC - Close program");
+            /*ImGui::SliderFloat("Light Dir X", &lightDirX, -20.0f, 20.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Light Dir Y", &lightDirY, -20.0f, 20.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Light Dir Z", &lightDirZ, -20.0f, 20.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Ambient Dir X", &lightAmbientX, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Ambient Dir Y", &lightAmbientY, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Ambient Dir Z", &lightAmbientZ, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Diffuse Dir X", &lightDiffuseX, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Diffuse Dir Y", &lightDiffuseY, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Diffuse Dir Z", &lightDiffuseZ, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Spec Dir X", &lightSpecX, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Spec Dir Y", &lightSpecY, 0.0f, 1.0f, "ratio = %.3f");
+            ImGui::SliderFloat("Spec Dir Z", &lightSpecZ, 0.0f, 1.0f, "ratio = %.3f");*/
             ImGui::End();
         }
 
@@ -156,10 +174,10 @@ int main()
             simpleShader.setFloat("material.shininess", 32.0f);
 
             Light dirLight(LIGHT_DIRECTIONAL, &simpleShader);
-            dirLight.setDirection(-0.3f, -5.0f, -0.6f);
-            dirLight.setAmbient(0.5f, 0.5f, 0.5f);
-            dirLight.setDiffuse(0.8f, 0.8f, 0.8f);
-            dirLight.setSpecular(1.0f, 1.0f, 1.0f);
+            dirLight.setDirection(lightDirX, lightDirY, lightDirZ);
+            dirLight.setAmbient(lightAmbientX, lightAmbientY, lightAmbientZ);
+            dirLight.setDiffuse(lightDiffuseX, lightDiffuseY, lightDiffuseZ);
+            dirLight.setSpecular(lightSpecX, lightSpecY, lightSpecZ);
 
             // view/projection transformations
             glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -177,10 +195,10 @@ int main()
             lightingShader.setFloat("material.shininess", 32.0f);
 
             Light dirLight(LIGHT_DIRECTIONAL, &lightingShader);
-            dirLight.setDirection(-0.3f, -5.0f, -0.6f);
-            dirLight.setAmbient(0.5f, 0.5f, 0.5f);
-            dirLight.setDiffuse(0.8f, 0.8f, 0.8f);
-            dirLight.setSpecular(1.0f, 1.0f, 1.0f);
+            dirLight.setDirection(lightDirX, lightDirY, lightDirZ);
+            dirLight.setAmbient(lightAmbientX, lightAmbientY, lightAmbientZ);
+            dirLight.setDiffuse(lightDiffuseX, lightDiffuseY, lightDiffuseZ);
+            dirLight.setSpecular(lightSpecX, lightSpecY, lightSpecZ);
 
             // view/projection transformations
             glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);

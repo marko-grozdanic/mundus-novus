@@ -6,6 +6,7 @@ struct Vertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
+	int adjacentFaceCount;
 };
 
 class Terrain {
@@ -21,8 +22,8 @@ public:
 	void setupTerrain();
 	void drawTerrain(bool wireframe);
 	void setSize(int n);
-	void calculateVertexNormals();
-	void calculateFaceNormals();
+	glm::vec3 calculateVertexNormals(Vertex vertex);
+	glm::vec3 calculateFaceNormals(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2);
 
 	//Different heightmap generation algorithms
 	void genMidpointDisplacement(unsigned int seed, float spread, float spreadReductionRate);
