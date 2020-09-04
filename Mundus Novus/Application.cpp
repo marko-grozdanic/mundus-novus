@@ -73,23 +73,39 @@ int main()
     // configure global opengl state
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE); //Enable Antialiasing, sample amount set with glfwWindowHint
+    glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_COLOR, GL_DST_COLOR);
 
     //Configure shaders, textures, pass textures as uniforms
     Shader lightingShader("./Resources/Shaders/diffuseSpecularAmbientShader.vert", "./Resources/Shaders/diffuseSpecularAmbientShader.frag");
     Shader simpleShader("./Resources/Shaders/simpleShader.vert", "./Resources/Shaders/simpleShader.frag");
 
-    //Texture grassDiffuse("pebbles_diffuse.png", true), grassSpecular("pebbles_specular.png", true);
-    Texture grassDiffuse("grass.png", true), grassSpecular("grass_spec.png", true);
+    Texture grassDiffuse("grass.png", true), grassSpecular("grass_specular.png", true);
+    Texture earthDiffuse("earth.png", true), earthSpecular("earth_specular.png", true);
+    Texture rockDiffuse("rock.png", true), rockSpecular("rock_specular.png", true);
+    Texture cliffSnowDiffuse("snow.png", true), cliffSnowSpecular("snow_specular.png", true);
 
     lightingShader.use();
-    lightingShader.setInt("material.diffuse", grassDiffuse.ID);
-    lightingShader.setInt("material.specular", grassSpecular.ID);
+    lightingShader.setInt("grass.diffuse", grassDiffuse.ID);
+    lightingShader.setInt("grass.specular", grassSpecular.ID);
+    lightingShader.setFloat("grass.shininess", 2.0f);
+    lightingShader.setInt("earth.diffuse", earthDiffuse.ID);
+    lightingShader.setInt("earth.specular", earthSpecular.ID);
+    lightingShader.setFloat("earth.shininess", 2.0f);
+    lightingShader.setInt("rock.diffuse", rockDiffuse.ID);
+    lightingShader.setInt("rock.specular", rockSpecular.ID);
+    lightingShader.setFloat("rock.shininess", 32.0f);
+    lightingShader.setInt("snow.diffuse", cliffSnowDiffuse.ID);
+    lightingShader.setInt("snow.specular", cliffSnowSpecular.ID);
+    lightingShader.setFloat("snow.shininess", 42.0f);
+
 
     //Start with rendering a flat terrain
     int sizeN = 6;
     Terrain newTerrain(sizeN);
     newTerrain.generateTerrain();    
     newTerrain.setupTerrain();
+    lightingShader.setVec2("heightParams", glm::vec2(0.0f, 0.0f));
 
     const char* glsl_version = "#version 460";
     IMGUI_CHECKVERSION();
@@ -144,8 +160,9 @@ int main()
                 newTerrain.setSize(sizeN);
                 newTerrain.genMidpointDisplacement(seed, fHeight, fRoughness);
                 newTerrain.generateTerrain();
+                std::cout << "heightParams min: " << newTerrain.minHeight << " heightParams max: " << newTerrain.maxHeight << std::endl;
+                lightingShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
                 newTerrain.setupTerrain();
-                std::cout << "Generate!!" << std::endl;
             }
 
             ImGui::Text("(%.1f FPS)\n", ImGui::GetIO().Framerate);
@@ -171,7 +188,6 @@ int main()
         if (topShader) {
             simpleShader.use();
             simpleShader.setVec3("viewPos", camera.Position);
-            simpleShader.setFloat("material.shininess", 32.0f);
 
             Light dirLight(LIGHT_DIRECTIONAL, &simpleShader);
             dirLight.setDirection(lightDirX, lightDirY, lightDirZ);
@@ -192,7 +208,6 @@ int main()
         else {
             lightingShader.use();
             lightingShader.setVec3("viewPos", camera.Position);
-            lightingShader.setFloat("material.shininess", 32.0f);
 
             Light dirLight(LIGHT_DIRECTIONAL, &lightingShader);
             dirLight.setDirection(lightDirX, lightDirY, lightDirZ);
@@ -216,6 +231,30 @@ int main()
             // bind specular map
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, 1);
+            // bind diffuse map
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, 2);
+            // bind specular map
+            glActiveTexture(GL_TEXTURE3);
+            glBindTexture(GL_TEXTURE_2D, 3);
+            // bind diffuse map
+            glActiveTexture(GL_TEXTURE4);
+            glBindTexture(GL_TEXTURE_2D, 4);
+            // bind specular map
+            glActiveTexture(GL_TEXTURE5);
+            glBindTexture(GL_TEXTURE_2D, 5);
+            // bind diffuse map
+            glActiveTexture(GL_TEXTURE6);
+            glBindTexture(GL_TEXTURE_2D, 6);
+            // bind specular map
+            glActiveTexture(GL_TEXTURE7);
+            glBindTexture(GL_TEXTURE_2D, 7);
+            /*// bind diffuse map
+            glActiveTexture(GL_TEXTURE8);
+            glBindTexture(GL_TEXTURE_2D, 8);
+            // bind specular map
+            glActiveTexture(GL_TEXTURE9);
+            glBindTexture(GL_TEXTURE_2D, 9);*/
         }
 
         // Rendering

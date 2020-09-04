@@ -15,11 +15,15 @@ Terrain::Terrain(unsigned int n) {
 	this->sizeX = pow(2, n) + 1;
 	//this->sizeX = pow(2, n);
 	this->terrainHeightmap.resize(sizeX * sizeX);
+	this->minHeight = INFINITY;
+	this->maxHeight = -INFINITY;
 }
 
 void Terrain::setupTerrain() {
 	std::cout << "Vertices: " << this->vertices.size() << std::endl;
 	std::cout << "Indices: " << this->indices.size() << std::endl;
+	std::cout << "Min height: " << minHeight << std::endl;
+	std::cout << "Max height: " << maxHeight << std::endl;
 	// Create buffers/arrays
 	/*for (int i = 0; i < indices.size() / 3; i += 3) {
 		std::cout << indices[i] << ", " << indices[i + 1] << ", " << indices[i + 2] << std::endl;
@@ -97,7 +101,7 @@ void Terrain::generateTerrain() {
 		for (int j = 0; j < sizeX; j++) {
 			vertex.Position.x = (float)i;
 			vertex.Position.z = (float)j;
-			vertex.Position.y = this->terrainHeightmap[i * sizeX + j] + this->minHeightOffset;
+			vertex.Position.y = this->terrainHeightmap[i * sizeX + j]; //+ this->minHeightOffset;
 			vertex.Normal.x = 0.0f;
 			vertex.Normal.y = 0.0f;
 			vertex.Normal.z = 0.0f;
@@ -105,6 +109,13 @@ void Terrain::generateTerrain() {
 			vertex.TexCoords.y = float(j);
 			vertex.adjacentFaceCount = 0;
 			vertices.push_back(vertex);
+
+			if (vertex.Position.y < minHeight) {
+				minHeight = vertex.Position.y;
+			}
+			else if (vertex.Position.y > maxHeight) {
+				maxHeight = vertex.Position.y;
+			}
 		}
 	}
 	glm::vec3 faceNormal;

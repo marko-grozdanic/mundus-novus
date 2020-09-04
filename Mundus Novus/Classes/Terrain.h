@@ -17,6 +17,9 @@ public:
 	std::vector<unsigned int> indices;
 	std::vector<float> terrainHeightmap;
 
+	float minHeight;
+	float maxHeight;
+
 	Terrain(unsigned int sizeX);
 	void generateTerrain();
 	void setupTerrain();
