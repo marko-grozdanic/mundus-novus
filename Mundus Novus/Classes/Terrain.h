@@ -34,5 +34,4 @@ public:
 private:
 	//  render data
 	unsigned int VAO;
-	float minHeightOffset;
 };

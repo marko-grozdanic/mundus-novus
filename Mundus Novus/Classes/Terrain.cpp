@@ -20,21 +20,6 @@ Terrain::Terrain(unsigned int n) {
 }
 
 void Terrain::setupTerrain() {
-	std::cout << "Vertices: " << this->vertices.size() << std::endl;
-	std::cout << "Indices: " << this->indices.size() << std::endl;
-	std::cout << "Min height: " << minHeight << std::endl;
-	std::cout << "Max height: " << maxHeight << std::endl;
-	// Create buffers/arrays
-	/*for (int i = 0; i < indices.size() / 3; i += 3) {
-		std::cout << indices[i] << ", " << indices[i + 1] << ", " << indices[i + 2] << std::endl;
-	}*/
-	/*for (int i = 0; i < triangleNormals.size(); i++) {
-		std::cout << triangleNormals[i][0] << ", " << triangleNormals[i][1] << ", " << triangleNormals[i][2] << std::endl;
-	}*/
-	/*for (int i = 0; i < vertices.size(); i++) {
-		std::cout << "Adjacent faces: " << vertices[i].adjacentFaceCount << ", " << vertices[i].Normal.x << ", " << vertices[i].Normal.y << ", " << vertices[i].Normal.z << std::endl;
-	}*/
-	//std::cout << "Triangles: " << triangleNormals.size() << std::endl;
 	unsigned int VBO;
 
 	glGenVertexArrays(1, &VAO);
@@ -101,7 +86,7 @@ void Terrain::generateTerrain() {
 		for (int j = 0; j < sizeX; j++) {
 			vertex.Position.x = (float)i;
 			vertex.Position.z = (float)j;
-			vertex.Position.y = this->terrainHeightmap[i * sizeX + j]; //+ this->minHeightOffset;
+			vertex.Position.y = this->terrainHeightmap[i * sizeX + j];
 			vertex.Normal.x = 0.0f;
 			vertex.Normal.y = 0.0f;
 			vertex.Normal.z = 0.0f;
@@ -155,7 +140,6 @@ void Terrain::genMidpointDisplacement(unsigned int seed, float spread, float spr
 	MidpointDisplacement heightmapMD(seed, spread, spreadReductionRate, sizeX, sizeN);
 
 	this->terrainHeightmap = heightmapMD.heightmap;
-	this->minHeightOffset = abs(heightmapMD.getMinHeight());
 }
 
 void Terrain::setSize(int n) {

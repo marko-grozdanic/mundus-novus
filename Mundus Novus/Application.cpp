@@ -78,7 +78,7 @@ int main()
 
     //Configure shaders, textures, pass textures as uniforms
     Shader lightingShader("./Resources/Shaders/diffuseSpecularAmbientShader.vert", "./Resources/Shaders/diffuseSpecularAmbientShader.frag");
-    Shader simpleShader("./Resources/Shaders/simpleShader.vert", "./Resources/Shaders/simpleShader.frag");
+    Shader heightmapShader("./Resources/Shaders/heightmapShader.vert", "./Resources/Shaders/heightmapShader.frag");
 
     Texture grassDiffuse("grass.png", true), grassSpecular("grass_specular.png", true);
     Texture earthDiffuse("earth.png", true), earthSpecular("earth_specular.png", true);
@@ -118,7 +118,7 @@ int main()
     ImGui::GetIO().WantCaptureMouse = false;    
 
     static bool wireframe = false;
-    static bool topShader = false;
+    static bool useHeightmapShader = false;
 
     float lightDirX = 4.13f, lightDirY = 5.34f, lightDirZ = 2.75;
     float lightAmbientX = 0.2f, lightAmbientY = 0.2f, lightAmbientZ = 0.2f;
@@ -150,18 +150,15 @@ int main()
             ImGui::Begin("Settings");
 
             ImGui::Checkbox("Wireframe", &wireframe);
-            ImGui::Checkbox("Topological Shader", &topShader);
-            ImGui::SliderInt("Size(2^n + 1)", &sizeN, 2, 10);
+            ImGui::Checkbox("Heightmap Shader", &useHeightmapShader);
+            ImGui::SliderInt("Size(2^n + 1)", &sizeN, 3, 9);
             ImGui::InputInt("Seed", &seed);
             ImGui::InputFloat("fHeight", &fHeight, 0.01f, 1.0f, "%.2f");
             ImGui::SliderFloat("fRoughness", &fRoughness, 0.0f, 1.0f, "ratio = %.3f");
-            //ImGui::InputFloat("fRoughness", &fRoughness, 0.01f, 1.0f, "%.2f");
             if (ImGui::Button("Generate")) {          
                 newTerrain.setSize(sizeN);
                 newTerrain.genMidpointDisplacement(seed, fHeight, fRoughness);
                 newTerrain.generateTerrain();
-                std::cout << "heightParams min: " << newTerrain.minHeight << " heightParams max: " << newTerrain.maxHeight << std::endl;
-                lightingShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
                 newTerrain.setupTerrain();
             }
 
@@ -169,27 +166,17 @@ int main()
             ImGui::Text("Controls (?)");
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("WASD - Camera movement\nRight mouse button - Rotate camera\nESC - Close program");
-            /*ImGui::SliderFloat("Light Dir X", &lightDirX, -20.0f, 20.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Light Dir Y", &lightDirY, -20.0f, 20.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Light Dir Z", &lightDirZ, -20.0f, 20.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Ambient Dir X", &lightAmbientX, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Ambient Dir Y", &lightAmbientY, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Ambient Dir Z", &lightAmbientZ, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Diffuse Dir X", &lightDiffuseX, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Diffuse Dir Y", &lightDiffuseY, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Diffuse Dir Z", &lightDiffuseZ, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Spec Dir X", &lightSpecX, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Spec Dir Y", &lightSpecY, 0.0f, 1.0f, "ratio = %.3f");
-            ImGui::SliderFloat("Spec Dir Z", &lightSpecZ, 0.0f, 1.0f, "ratio = %.3f");*/
             ImGui::End();
         }
 
         // be sure to activate shader when setting uniforms/drawing objects
-        if (topShader) {
-            simpleShader.use();
-            simpleShader.setVec3("viewPos", camera.Position);
+        if (useHeightmapShader) {
+            heightmapShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
 
-            Light dirLight(LIGHT_DIRECTIONAL, &simpleShader);
+            heightmapShader.use();
+            heightmapShader.setVec3("viewPos", camera.Position);
+
+            Light dirLight(LIGHT_DIRECTIONAL, &heightmapShader);
             dirLight.setDirection(lightDirX, lightDirY, lightDirZ);
             dirLight.setAmbient(lightAmbientX, lightAmbientY, lightAmbientZ);
             dirLight.setDiffuse(lightDiffuseX, lightDiffuseY, lightDiffuseZ);
@@ -198,14 +185,16 @@ int main()
             // view/projection transformations
             glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
             glm::mat4 view = camera.GetViewMatrix();
-            simpleShader.setMat4("projection", projection);
-            simpleShader.setMat4("view", view);
+            heightmapShader.setMat4("projection", projection);
+            heightmapShader.setMat4("view", view);
 
             // world transformation
             glm::mat4 model = glm::mat4(1.0f);
-            simpleShader.setMat4("model", model);
+            heightmapShader.setMat4("model", model);
         }
         else {
+            lightingShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
+
             lightingShader.use();
             lightingShader.setVec3("viewPos", camera.Position);
 
@@ -225,36 +214,23 @@ int main()
             glm::mat4 model = glm::mat4(1.0f);
             lightingShader.setMat4("model", model);
 
-            // bind diffuse map
-            glActiveTexture(GL_TEXTURE0);
+            /* Bind diffuse and specular maps for textures*/
+            glActiveTexture(GL_TEXTURE0); //bind diffuse map
             glBindTexture(GL_TEXTURE_2D, 0);
-            // bind specular map
-            glActiveTexture(GL_TEXTURE1);
+            glActiveTexture(GL_TEXTURE1); //bind specular map
             glBindTexture(GL_TEXTURE_2D, 1);
-            // bind diffuse map
             glActiveTexture(GL_TEXTURE2);
             glBindTexture(GL_TEXTURE_2D, 2);
-            // bind specular map
             glActiveTexture(GL_TEXTURE3);
             glBindTexture(GL_TEXTURE_2D, 3);
-            // bind diffuse map
             glActiveTexture(GL_TEXTURE4);
             glBindTexture(GL_TEXTURE_2D, 4);
-            // bind specular map
             glActiveTexture(GL_TEXTURE5);
             glBindTexture(GL_TEXTURE_2D, 5);
-            // bind diffuse map
             glActiveTexture(GL_TEXTURE6);
             glBindTexture(GL_TEXTURE_2D, 6);
-            // bind specular map
             glActiveTexture(GL_TEXTURE7);
             glBindTexture(GL_TEXTURE_2D, 7);
-            /*// bind diffuse map
-            glActiveTexture(GL_TEXTURE8);
-            glBindTexture(GL_TEXTURE_2D, 8);
-            // bind specular map
-            glActiveTexture(GL_TEXTURE9);
-            glBindTexture(GL_TEXTURE_2D, 9);*/
         }
 
         // Rendering

@@ -109,12 +109,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\simpleShader.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\simpleShader.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\diffuseSpecularAmbientShader.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>
@@ -125,6 +119,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\lightingCube.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\heightmapShader.frag">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\heightmapShader.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

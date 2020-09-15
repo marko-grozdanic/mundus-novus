@@ -14,7 +14,6 @@ MidpointDisplacement::MidpointDisplacement(unsigned int seed, float fHeight, flo
 	clearHeightmap();
 	randomiseCorners();
 	midpointDisplacement();
-	//normaliseHeightmap();
 }
 
 float GetRandom(float fHeight)
@@ -106,48 +105,4 @@ void MidpointDisplacement::calculateMidpoints(int a, int b, int c, int d)
 	rightEdge = heightmap[b * sizeX + midpointY];
 	//Diamond step
 	heightmap[midpointX * sizeX + midpointY] = fourPointAverage(bottomEdge, topEdge, leftEdge, rightEdge) + GetRandom(fHeight);
-}
-
-//Used for generating heightmaps for export, values ranging [0-1]
-void MidpointDisplacement::normaliseHeightmap()
-{
-	float min = INFINITY;
-	float max = -INFINITY;
-
-	for (int y = 0; y < sizeX; y++)
-	{
-		for (int x = 0; x < sizeX; x++)
-		{
-			float current = heightmap[y * sizeX + x];
-			if (current >= max)
-				max = current;
-			if (current <= min)
-				min = current;
-		}
-	}
-
-	for (int y = 0; y < sizeX; y++)
-	{
-		for (int x = 0; x < sizeX; x++)
-		{
-			float value = heightmap[x * sizeX + y];
-			heightmap[x * sizeX + y] = ((value - min) / (max - min)); //Inverse Lerp
-		}
-	}
-}
-
-//Used for offsetting the terrain in world view
-float MidpointDisplacement::getMinHeight() {
-	float min = INFINITY;
-
-	for (int y = 0; y < sizeX; y++)
-	{
-		for (int x = 0; x < sizeX; x++)
-		{
-			float current = heightmap[y * sizeX + x];
-			if (current <= min)
-				min = current;
-		}
-	}
-	return min;
 }

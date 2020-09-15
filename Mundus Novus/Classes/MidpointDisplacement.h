@@ -5,7 +5,6 @@ public:
 	std::vector<float> heightmap;
 
 	MidpointDisplacement(unsigned int seed, float spread, float spreadReductionRate, int sizeX, int n);
-	float getMinHeight();
 private: 
 	int sizeX;
 	int n;
@@ -17,6 +16,5 @@ private:
 	void clearHeightmap();
 	void randomiseCorners();
 	void midpointDisplacement();
-	void normaliseHeightmap();
 	void calculateMidpoints(int a, int b, int c, int d);	
 };
