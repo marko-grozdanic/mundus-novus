@@ -189,8 +189,6 @@
   <ItemGroup>
     <None Include="Resources\Shaders\diffuseSpecularAmbientShader.frag" />
     <None Include="Resources\Shaders\diffuseSpecularAmbientShader.vert" />
-    <None Include="Resources\Shaders\lightingCube.frag" />
-    <None Include="Resources\Shaders\lightingCube.vert" />
     <None Include="Resources\Shaders\heightmapShader.frag" />
     <None Include="Resources\Shaders\heightmapShader.vert" />
   </ItemGroup>

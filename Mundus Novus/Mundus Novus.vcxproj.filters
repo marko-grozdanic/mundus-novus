@@ -115,12 +115,6 @@
     <None Include="Resources\Shaders\diffuseSpecularAmbientShader.vert">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="Resources\Shaders\lightingCube.vert">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="Resources\Shaders\lightingCube.frag">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
     <None Include="Resources\Shaders\heightmapShader.frag">
       <Filter>Source Files\Shaders</Filter>
     </None>

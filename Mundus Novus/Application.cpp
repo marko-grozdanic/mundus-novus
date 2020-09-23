@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <STB/stb_image.h>
 
 #include "Classes/Shader.h"
 #include "Classes/Texture.h"
@@ -53,6 +54,12 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
+
+    //Window icon
+    GLFWimage images[1];
+    images[0].pixels = stbi_load("./Resources/Icons/window48.png", &images[0].width, &images[0].height, 0, 4);
+    glfwSetWindowIcon(window, 1, images);
+    stbi_image_free(images[0].pixels);
 
     /* Register callback functions after window creation and  before initiating the render loop */
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
@@ -151,7 +158,7 @@ int main()
 
             ImGui::Checkbox("Wireframe", &wireframe);
             ImGui::Checkbox("Heightmap Shader", &useHeightmapShader);
-            ImGui::SliderInt("Size(2^n + 1)", &sizeN, 3, 9);
+            ImGui::SliderInt("Size(2^n + 1)", &sizeN, 3, 8);
             ImGui::InputInt("Seed", &seed);
             ImGui::InputFloat("fHeight", &fHeight, 0.01f, 1.0f, "%.2f");
             ImGui::SliderFloat("fRoughness", &fRoughness, 0.0f, 1.0f, "ratio = %.3f");
@@ -183,7 +190,7 @@ int main()
             dirLight.setSpecular(lightSpecX, lightSpecY, lightSpecZ);
 
             // view/projection transformations
-            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 500.0f);
             glm::mat4 view = camera.GetViewMatrix();
             heightmapShader.setMat4("projection", projection);
             heightmapShader.setMat4("view", view);
@@ -205,7 +212,7 @@ int main()
             dirLight.setSpecular(lightSpecX, lightSpecY, lightSpecZ);
 
             // view/projection transformations
-            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 500.0f);
             glm::mat4 view = camera.GetViewMatrix();
             lightingShader.setMat4("projection", projection);
             lightingShader.setMat4("view", view);
