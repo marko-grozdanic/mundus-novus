@@ -1,6 +1,6 @@
-# mathos-opengl-terrain
+# Mundus Novus
 
-# OpenGL 3D Terrain generator
+# An OpenGL 3D Terrain generator
 
 An OpenGL application for procedurally generating terrain meshes using the Midpoint Displacement(Diamond-Square) algorithm. The application includes two shaders, a Phong lighting shader and a topological shader based on vertex height. 
 
@@ -20,14 +20,15 @@ An OpenGL application for procedurally generating terrain meshes using the Midpo
 
 ### Running the program
 1. Open the solution mathos-opengl-terrain/Mundus Novus/Mundus Novus.sln in Visual Studio 2019.
-2. The target build options are Debug, x64.
+2. The target build options are Debug/Release, x64.
 [Build options](https://puu.sh/Gmlox/90fe9cdc9f.png)
 3. Press Ctrl+F5 or *Debug->Start without debugging* to run the application. Building should recognise all the dependencies and successfully build the solution. 
 
 ### Controls
 1. W, A, S, D - Camera movement
 2. Right mouse button - Rotate camera
-3. Esc - Exit application
+3. Mouse scroll - Zoom in/out
+4. Esc - Exit application
 
 ### UI
 * Wireframe - Enables wireframe view
@@ -36,6 +37,7 @@ An OpenGL application for procedurally generating terrain meshes using the Midpo
 * fHeight - **float**, Influences the minimum and maximum height during midpoint number generation
 * fHeightReduction - **float [0, 1]**. Influences the random number dropoff during number generation. Represents terrain roughness.
 * Generate - Generates terrain
+* Reset - Resets terrain
 * FPS Counter
 * Controls (?) - Hover over to see controls tooltip
 
@@ -50,4 +52,4 @@ An OpenGL application for procedurally generating terrain meshes using the Midpo
   * Texture - Loads a texture using STB_image.h
 * Resources/ 
   * Textures - Contains textures used by the application
-  * Shaders - Contains vertex(.vert) and fragment(.frag) shaders. *diffuseSpecularAmbientShader* for Phong lighting, *simpleShader* for topological lighting.
+  * Shaders - Contains vertex(.vert) and fragment(.frag) shaders. *diffuseSpecularAmbientShader* for Phong lighting, *heightmapShader* for topological lighting.
