@@ -22,6 +22,7 @@ public:
 
 	Terrain(unsigned int sizeX);
 	void generateTerrain();
+	void resetTerrain();
 	void setupTerrain();
 	void drawTerrain(bool wireframe);
 	void setSize(int n);

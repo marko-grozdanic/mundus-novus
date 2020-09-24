@@ -38,7 +38,7 @@ void main()
     
     // phase 1: directional lighting
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
-    //result *= 1.4f; //Amplify directional light influence
+    result *= 1.1f; //Amplify directional light influence
 
     FragColor = vec4(result, 1.0);
 }
@@ -105,13 +105,3 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 
     return (ambient + diffuse + specular);
 }
-
-/*
-    vec3 ambient = light.ambient * vec3(texture(grass.diffuse, TexCoords));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(grass.diffuse, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(grass.specular, TexCoords));
-
-    vec3 ambient = light.ambient * vec3(mix(texture(grass.diffuse, TexCoords), texture(snow.diffuse, TexCoords), normalisedHeight));
-    vec3 diffuse = light.diffuse * diff * vec3(mix(texture(grass.diffuse, TexCoords), texture(snow.diffuse, TexCoords), normalisedHeight));
-    vec3 specular = light.specular * spec * vec3(mix(texture(grass.specular, TexCoords), texture(snow.specular, TexCoords), normalisedHeight));
-*/

@@ -20,7 +20,6 @@ float GetRandom(float fHeight)
 {
 	int min = -fHeight/2;
 	int max = fHeight/2;
-	//rand() % (max_number + 1 - minimum_number) + minimum_number
 	return (min + rand() % ((max + 1) - min));
 }
 
@@ -70,7 +69,6 @@ int returnNLogValue(int n)
 void MidpointDisplacement::midpointDisplacement()
 {
 	int i = 0;
-	//while (i < n)
 	while (i < returnNLogValue(sizeX))
 	{
 		int numberOfQuads = pow(4, i);

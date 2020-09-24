@@ -13,10 +13,7 @@
 Terrain::Terrain(unsigned int n) {
 	this->sizeN = n;
 	this->sizeX = pow(2, n) + 1;
-	//this->sizeX = pow(2, n);
 	this->terrainHeightmap.resize(sizeX * sizeX);
-	this->minHeight = INFINITY;
-	this->maxHeight = -INFINITY;
 }
 
 void Terrain::setupTerrain() {
@@ -78,6 +75,8 @@ glm::vec3 Terrain::calculateVertexNormals(Vertex vertex) {
 }
 
 void Terrain::generateTerrain() {
+	this->minHeight = INFINITY;
+	this->maxHeight = -INFINITY;
 	vertices.clear();
 	indices.clear();
 	int size = sizeX * sizeX;
@@ -134,6 +133,10 @@ void Terrain::generateTerrain() {
 	for (int i = 0; i < vertices.size(); i++) {
 		vertices[i].Normal = glm::normalize(vertices[i].Normal);
 	}
+}
+
+void Terrain::resetTerrain() {
+	std::fill(this->terrainHeightmap.begin(), this->terrainHeightmap.end(), 0);
 }
 
 void Terrain::genMidpointDisplacement(unsigned int seed, float spread, float spreadReductionRate) {

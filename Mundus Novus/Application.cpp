@@ -167,6 +167,15 @@ int main()
                 newTerrain.genMidpointDisplacement(seed, fHeight, fRoughness);
                 newTerrain.generateTerrain();
                 newTerrain.setupTerrain();
+                heightmapShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
+                lightingShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
+            }
+            if (ImGui::Button("Reset")) {
+                newTerrain.resetTerrain();
+                newTerrain.generateTerrain();
+                newTerrain.setupTerrain();
+                heightmapShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
+                lightingShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
             }
 
             ImGui::Text("(%.1f FPS)\n", ImGui::GetIO().Framerate);
@@ -176,7 +185,6 @@ int main()
             ImGui::End();
         }
 
-        // be sure to activate shader when setting uniforms/drawing objects
         if (useHeightmapShader) {
             heightmapShader.setVec2("heightParams", glm::vec2(newTerrain.minHeight, newTerrain.maxHeight));
 
