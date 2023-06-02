@@ -1,5 +1,7 @@
 # Mundus Novus
 
+![](https://i.imgur.com/F6hTaZj.jpg)
+
 # An OpenGL 3D Terrain generator
 
 An OpenGL application for procedurally generating terrain meshes using the Midpoint Displacement(Diamond-Square) algorithm. The application includes two shaders, a Phong lighting shader and a topological shader based on vertex height. 
